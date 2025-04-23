@@ -1,10 +1,16 @@
+from time import sleep
+
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
+from django.template.defaultfilters import default
+
+
 # Create your models here.
 
 class CustomerUserManager(BaseUserManager):
     def create_user(self, phone, password=None, is_active=True, is_staff=False, is_superuser=False, **extra_fields):
-        user = self.model(phone=phone, password=password, is_active=is_active, is_staff=is_staff, is_superuser=is_superuser)
+        user = self.model(phone=phone, is_active=is_active, is_staff=is_staff, is_superuser=is_superuser,
+                          **extra_fields)
         user.set_password(password)
         user.save()
         return user
@@ -34,3 +40,19 @@ class CustomUser(AbstractBaseUser):
             'is_superuser': self.is_superuser,
 
         }
+
+class OTP(models.Model):
+    phone = models.CharField(max_length=12)
+    key = models.CharField(max_length=100)
+
+    is_expire = models.BooleanField(default=False)
+    is_conf = models.BooleanField(default=False)
+    tried = models.IntegerField(default=0)
+
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        if self.tried >= 3:
+            self.is_expire = True
+        super(OTP, self).save()
