@@ -16,7 +16,17 @@ from authapp.models import CustomerUserManager
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 from rest_framework import status
+#Methodismniki
+from methodism import METHODISM
+from authapp import methods
 # Create your views here.
+
+class Main(METHODISM):
+    file = methods
+    token_key = 'Token'
+    not_auth_methods = ['regis', 'login ']
+
+
 
 # def validate_password(password):
 #     data = request.data
