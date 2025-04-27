@@ -3,9 +3,7 @@ from multiprocessing.managers import Token
 import random
 import uuid
 import datetime
-from django.contrib.auth.password_validation import password_changed
-from django.shortcuts import render
-from django.template.context_processors import request
+from authapp.methods.helper import send_to_mail
 from rest_framework.views import APIView
 from websockets import Response
 from rest_framework.response import Response
@@ -220,6 +218,9 @@ class AuthOne(APIView):
         # print(int_)
         # print(str_)
         key = uuid.uuid4().__str__() + code
+
+
+        send_to_mail(request, 'tdiyorbek079@gmail.com', code)
 
         otp = OTP.objects.create(phone=data['phone'], key=key)
 

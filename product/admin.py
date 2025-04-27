@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post
+from product.models.products import Post
 # Register your models here.
 
 
